@@ -9,4 +9,7 @@
     <string name="custom_location_default_text">Custom location</string>
     <string name="current_location_radiobutton_text">Current location</string>
     <string name="custom_location_radiobutton_text">Custom location</string>
+    <string name="latitude_label">Latitude:</string>
+    <string name="longitude_label">Longitude:</string>
+    <string name="locality_label">Locality:</string>
 </resources>
