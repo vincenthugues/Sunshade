@@ -13,73 +13,35 @@ import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
-
 import java.io.IOException;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+import android.widget.Toast;
 
-    GoogleApiClient mGoogleApiClient;
-    Location mLastLocation;
+public class MainActivity extends AppCompatActivity implements LocationProvider.LocationCallback  {
+    private final static String TAG = "MainActivity";
+    private LocationProvider mLocationProvider;
+    private Location mLastLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        buildGoogleApiClient();
+        mLocationProvider = new LocationProvider(this, this);
     }
 
     @Override
-    public void onConnected(Bundle connectionHint) {
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+    protected void onResume() {
+        super.onResume();
+        mLocationProvider.connect();
     }
 
     @Override
-    public void onConnectionSuspended(int i) {
-        Log.i(null, "Connection suspended");
+    protected void onPause() {
+        super.onPause();
+        mLocationProvider.disconnect();
     }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.i(null, "Connection failed");
-    }
-
-    protected synchronized void buildGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-    }
-
-    /*
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-    */
 
     protected void displayInfo(double latitude, double longitude, String locality, String sunrise, String sunset) {
         // Latitude
@@ -112,8 +74,10 @@ public class MainActivity extends AppCompatActivity implements
         Geocoder geocoder = new Geocoder(this);
 
         try {
-            if (mLastLocation != null) {
-                addressList = geocoder.getFromLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude(), 1);
+            Location lastLocation = mLastLocation;
+
+            if (lastLocation != null) {
+                addressList = geocoder.getFromLocation(lastLocation.getLatitude(), lastLocation.getLongitude(), 1);
             } else {
                 Log.i(null, "Location empty");
             }
@@ -175,5 +139,12 @@ public class MainActivity extends AppCompatActivity implements
         customLocationEditText.setEnabled(true);
         customLocationEditText.setText("");
         customLocationEditText.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void handleNewLocation(Location location) {
+        Log.d(TAG, location.toString());
+
+        mLastLocation = location;
     }
 }
