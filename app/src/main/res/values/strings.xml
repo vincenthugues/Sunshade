@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Sunshade</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="sunset_label">Sunset:</string>
+    <string name="sunrise_label">Sunrise:</string>
+    <string name="get_info_button_text">Get info</string>
+    <string name="custom_location_default_text">Custom location</string>
+    <string name="current_location_radiobutton_text">Current location</string>
+    <string name="custom_location_radiobutton_text">Custom location</string>
+    <string name="latitude_label">Latitude:</string>
+    <string name="longitude_label">Longitude:</string>
+    <string name="locality_label">Locality:</string>
+</resources>
