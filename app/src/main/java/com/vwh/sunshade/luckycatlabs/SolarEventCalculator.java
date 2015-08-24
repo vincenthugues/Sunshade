@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.vwh.sunshade;
+package com.vwh.sunshade.luckycatlabs;
 
 import java.math.BigDecimal;
 import java.math.MathContext;

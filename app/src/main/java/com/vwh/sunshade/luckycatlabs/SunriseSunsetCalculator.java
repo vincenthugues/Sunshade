@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.vwh.sunshade;
+package com.vwh.sunshade.luckycatlabs;
 
 import java.util.Calendar;
 import java.util.TimeZone;
