@@ -14,14 +14,22 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import android.widget.Toast;
+
+import com.vwh.sunshade.luckycatlabs.SunriseSunsetCalculator;
 
 public class MainActivity extends AppCompatActivity implements LocationProvider.LocationCallback  {
     private final static String TAG = "MainActivity";
     private LocationProvider mLocationProvider;
     private Location mLastLocation;
+
+    private String mOfficialSunrise = "", mOfficialSunset = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +55,6 @@ public class MainActivity extends AppCompatActivity implements LocationProvider.
         // Latitude
         TextView latitudeDisplay = (TextView) findViewById(R.id.latitudeDisplayTextView);
         latitudeDisplay.setText(String.valueOf(latitude));
-
         // Longitude
         TextView longitudeDisplay = (TextView) findViewById(R.id.longitudeDisplayTextView);
         longitudeDisplay.setText(String.valueOf(longitude));
@@ -56,17 +63,45 @@ public class MainActivity extends AppCompatActivity implements LocationProvider.
         TextView localityDisplay = (TextView) findViewById(R.id.localityDisplayTextView);
         localityDisplay.setText(locality);
 
-        // Locality
+        updateSunriseSunset();
+        sunrise = mOfficialSunrise;
+        sunset = mOfficialSunset;
+        // Sunrise
         TextView sunriseDisplay = (TextView) findViewById(R.id.sunriseDisplayTextView);
         sunriseDisplay.setText(sunrise);
-
-        // Locality
+        // Sunset
         TextView sunsetDisplay = (TextView) findViewById(R.id.sunsetDisplayTextView);
         sunsetDisplay.setText(sunset);
 
         // Make info visible
         LinearLayout infoLayout = (LinearLayout) findViewById(R.id.infoLayout);
         infoLayout.setVisibility(View.VISIBLE);
+    }
+
+    protected void updateSunriseSunset() {
+        // Get data
+        //SimpleDateFormat sdf = new SimpleDateFormat("MMM-dd-yyyy");
+        Date date = new Date(); // Current date
+
+        // Process data
+        SunriseSunsetCalculator calculator = new SunriseSunsetCalculator(
+                new com.vwh.sunshade.luckycatlabs.Location(mLastLocation.getLatitude(), mLastLocation.getLongitude()),
+                TimeZone.getDefault());
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+
+        mOfficialSunrise = calculator.getOfficialSunriseForDate(calendar);
+        mOfficialSunset = calculator.getOfficialSunsetForDate(calendar);
+
+        /*astronomicalSunrise = calculator.getAstronomicalSunriseForDate(calendar);
+        astronomicalSunset = calculator.getAstronomicalSunsetForDate(calendar);
+
+        civilSunrise = calculator.getCivilSunriseForDate(calendar);
+        civilSunset = calculator.getCivilSunsetForDate(calendar);
+
+        nauticalSunrise = calculator.getNauticalSunriseForDate(calendar);
+        nauticalSunset = calculator.getNauticalSunsetForDate(calendar);*/
     }
 
     protected void getCurrentLocationInfo() {
