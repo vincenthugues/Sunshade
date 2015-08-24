@@ -77,13 +77,16 @@
                     android:layout_height="wrap_content"
                     android:text="@string/latitude_label"
                     android:id="@+id/latitudeLabelTextView"
-                    android:visibility="visible" />
+                    android:visibility="visible"
+                    android:paddingRight="2dp"
+                    android:textSize="18dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/latitudeDisplayTextView"
-                    android:visibility="visible" />
+                    android:visibility="visible"
+                    android:textSize="18dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -97,13 +100,16 @@
                     android:layout_height="wrap_content"
                     android:text="@string/longitude_label"
                     android:id="@+id/longitudeLabelTextView"
-                    android:visibility="visible" />
+                    android:visibility="visible"
+                    android:paddingRight="2dp"
+                    android:textSize="18dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/longitudeDisplayTextView"
-                    android:visibility="visible" />
+                    android:visibility="visible"
+                    android:textSize="18dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -116,12 +122,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/locality_label"
-                    android:id="@+id/localityLabelTextView" />
+                    android:id="@+id/localityLabelTextView"
+                    android:paddingRight="2dp"
+                    android:textSize="18dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/localityDisplayTextView" />
+                    android:id="@+id/localityDisplayTextView"
+                    android:textSize="18dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -134,12 +143,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/sunrise_label"
-                    android:id="@+id/sunriseLabelTextView" />
+                    android:id="@+id/sunriseLabelTextView"
+                    android:paddingRight="2dp"
+                    android:textSize="18dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/sunriseDisplayTextView" />
+                    android:id="@+id/sunriseDisplayTextView"
+                    android:textSize="18dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -152,12 +164,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/sunset_label"
-                    android:id="@+id/sunsetLabelTextView" />
+                    android:id="@+id/sunsetLabelTextView"
+                    android:paddingRight="2dp"
+                    android:textSize="18dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/sunsetDisplayTextView" />
+                    android:id="@+id/sunsetDisplayTextView"
+                    android:textSize="18dp" />
             </LinearLayout>
         </LinearLayout>
 
