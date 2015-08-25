@@ -3,6 +3,7 @@ package com.vwh.sunshade;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +24,11 @@ import java.util.TimeZone;
 import android.widget.Toast;
 
 import com.vwh.sunshade.luckycatlabs.SunriseSunsetCalculator;
+import com.vwh.sunshade.survivingwithandroid.JSONWeatherParser;
+import com.vwh.sunshade.survivingwithandroid.Weather;
+import com.vwh.sunshade.survivingwithandroid.WeatherHttpClient;
+
+import org.json.JSONException;
 
 public class MainActivity extends AppCompatActivity implements LocationProvider.LocationCallback  {
     private final static String TAG = "MainActivity";
@@ -51,7 +57,28 @@ public class MainActivity extends AppCompatActivity implements LocationProvider.
         mLocationProvider.disconnect();
     }
 
-    protected void displayInfo(double latitude, double longitude, String locality, String sunrise, String sunset) {
+    protected void displayInfo(Address address) {
+        double latitude = address.getLatitude();
+        double longitude = address.getLongitude();
+
+        String locality = address.getLocality();
+        // Sometimes the locality is null, in those cases the address has 2 lines
+        // so the city is line 0 (instead of: [0] street, [1] city, [2] country code)
+        if (locality == null || locality.isEmpty())
+            locality = address.getAddressLine(0);
+
+        updateSunriseSunset();
+        String sunrise = mOfficialSunrise;
+        String sunset = mOfficialSunset;
+
+        LinearLayout infoLayout = (LinearLayout) findViewById(R.id.infoLayout);
+        infoLayout.setVisibility(View.INVISIBLE);
+
+        // Weather
+        JSONWeatherTask task = new JSONWeatherTask();
+        task.execute(locality + "," + address.getCountryCode());
+        // task.execute(lat, long);
+
         // Latitude
         TextView latitudeDisplay = (TextView) findViewById(R.id.latitudeDisplayTextView);
         latitudeDisplay.setText(String.valueOf(latitude));
@@ -63,19 +90,62 @@ public class MainActivity extends AppCompatActivity implements LocationProvider.
         TextView localityDisplay = (TextView) findViewById(R.id.localityDisplayTextView);
         localityDisplay.setText(locality);
 
-        updateSunriseSunset();
-        sunrise = mOfficialSunrise;
-        sunset = mOfficialSunset;
         // Sunrise
         TextView sunriseDisplay = (TextView) findViewById(R.id.sunriseDisplayTextView);
         sunriseDisplay.setText(sunrise);
+
         // Sunset
         TextView sunsetDisplay = (TextView) findViewById(R.id.sunsetDisplayTextView);
         sunsetDisplay.setText(sunset);
 
         // Make info visible
-        LinearLayout infoLayout = (LinearLayout) findViewById(R.id.infoLayout);
         infoLayout.setVisibility(View.VISIBLE);
+    }
+
+    private class JSONWeatherTask extends AsyncTask<String, Void, Weather> {
+
+        @Override
+        protected Weather doInBackground(String... params) {
+            Weather weather = new Weather();
+            String data = ((new WeatherHttpClient()).getWeatherData(params[0]));
+
+            try {
+                weather = JSONWeatherParser.getWeather(data);
+
+                // Let's retrieve the icon
+                //weather.iconData = ((new WeatherHttpClient()).getImage(weather.currentCondition.getIcon()));
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return weather;
+
+        }
+
+        @Override
+        protected void onPostExecute(Weather weather) {
+            super.onPostExecute(weather);
+
+            /*
+            if (weather.iconData != null && weather.iconData.length > 0) {
+                Bitmap img = BitmapFactory.decodeByteArray(weather.iconData, 0, weather.iconData.length);
+                imgView.setImageBitmap(img);
+            }
+            */
+
+            /*
+            cityText.setText(weather.location.getCity() + "," + weather.location.getCountry());
+            condDescr.setText(weather.currentCondition.getCondition() + "(" + weather.currentCondition.getDescr() + ")");
+            temp.setText("" + Math.round((weather.temperature.getTemp() - 273.15)) + "�C");
+            hum.setText("" + weather.currentCondition.getHumidity() + "%");
+            press.setText("" + weather.currentCondition.getPressure() + " hPa");
+            windSpeed.setText("" + weather.wind.getSpeed() + " mps");
+            windDeg.setText("" + weather.wind.getDeg() + "�");
+            */
+
+            TextView weatherDisplay = (TextView) findViewById(R.id.weatherDisplayTextView);
+            weatherDisplay.setText(weather.currentCondition.getCondition() + "(" + weather.currentCondition.getDescr() + ")");
+        }
     }
 
     protected void updateSunriseSunset() {
@@ -120,10 +190,8 @@ public class MainActivity extends AppCompatActivity implements LocationProvider.
             e.printStackTrace();
         }
 
-        if (addressList != null && !addressList.isEmpty()) {
-            Address address = addressList.get(0);
-            displayInfo(address.getLatitude(), address.getLongitude(), address.getLocality(), "", "");
-        }
+        if (addressList != null && !addressList.isEmpty())
+            displayInfo(addressList.get(0));
     }
 
     protected void getCustomLocationInfo() {
@@ -131,7 +199,7 @@ public class MainActivity extends AppCompatActivity implements LocationProvider.
         String location = customLocationEditText.getText().toString();
         List<Address> addressList = null;
 
-        if (location != null && !location.equals("")) {
+        if (!location.equals("")) {
             Geocoder geocoder = new Geocoder(this);
             try {
                 addressList = geocoder.getFromLocationName(location, 1);
@@ -139,11 +207,8 @@ public class MainActivity extends AppCompatActivity implements LocationProvider.
                 e.printStackTrace();
             }
 
-            if (addressList != null && !addressList.isEmpty()) {
-                Address address = addressList.get(0);
-                //LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-                displayInfo(address.getLatitude(), address.getLongitude(), address.getLocality(), "", "");
-            }
+            if (addressList != null && !addressList.isEmpty())
+                displayInfo(addressList.get(0));
         }
     }
 
