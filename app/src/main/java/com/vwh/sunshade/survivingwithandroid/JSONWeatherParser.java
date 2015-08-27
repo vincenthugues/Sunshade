@@ -79,6 +79,11 @@ public class JSONWeatherParser {
         return subObj;
     }
 
+    private static JSONArray getArray(String tagName, JSONObject jObj)  throws JSONException {
+        JSONArray array = jObj.getJSONArray(tagName);
+        return array;
+    }
+
     private static String getString(String tagName, JSONObject jObj) throws JSONException {
         return jObj.getString(tagName);
     }

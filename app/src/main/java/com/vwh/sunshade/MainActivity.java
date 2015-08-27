@@ -75,9 +75,15 @@ public class MainActivity extends AppCompatActivity implements LocationProvider.
         infoLayout.setVisibility(View.INVISIBLE);
 
         // Weather
+        TextView weatherDisplay = (TextView) findViewById(R.id.weatherDisplayTextView);
+        // Display a temporary message until we get the weather data
+        weatherDisplay.setText("Fetching data...");
         JSONWeatherTask task = new JSONWeatherTask();
-        task.execute(locality + "," + address.getCountryCode());
-        // task.execute(lat, long);
+        //task.execute(locality + "," + address.getCountryCode());
+        com.vwh.sunshade.survivingwithandroid.Location location = new com.vwh.sunshade.survivingwithandroid.Location();
+        location.setLatitude((float) latitude);
+        location.setLongitude((float) longitude);
+        task.execute(location);
 
         // Latitude
         TextView latitudeDisplay = (TextView) findViewById(R.id.latitudeDisplayTextView);
@@ -102,10 +108,10 @@ public class MainActivity extends AppCompatActivity implements LocationProvider.
         infoLayout.setVisibility(View.VISIBLE);
     }
 
-    private class JSONWeatherTask extends AsyncTask<String, Void, Weather> {
+    private class JSONWeatherTask extends AsyncTask<com.vwh.sunshade.survivingwithandroid.Location, Void, Weather> {
 
         @Override
-        protected Weather doInBackground(String... params) {
+        protected Weather doInBackground(com.vwh.sunshade.survivingwithandroid.Location... params) {
             Weather weather = new Weather();
             String data = ((new WeatherHttpClient()).getWeatherData(params[0]));
 
