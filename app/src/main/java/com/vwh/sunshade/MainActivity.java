@@ -234,13 +234,13 @@ public class MainActivity extends AppCompatActivity implements LocationProvider.
         }
     }
 
-    public void onCurrentLocationRadioButtonCLick(View view) {
+    public void onCurrentLocationRadioButtonClick(View view) {
         EditText customLocationEditText = (EditText) findViewById(R.id.custom_location_edittext);
         customLocationEditText.setEnabled(false);
         customLocationEditText.setVisibility(View.GONE);
     }
 
-    public void onCustomLocationRadioButtonCLick(View view) {
+    public void onCustomLocationRadioButtonClick(View view) {
         EditText customLocationEditText = (EditText) findViewById(R.id.custom_location_edittext);
         customLocationEditText.setEnabled(true);
         customLocationEditText.setText("");
