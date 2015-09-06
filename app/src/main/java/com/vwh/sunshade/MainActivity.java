@@ -1,5 +1,7 @@
 package com.vwh.sunshade;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -9,6 +11,8 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
@@ -32,10 +36,18 @@ import org.json.JSONException;
 
 public class MainActivity extends AppCompatActivity implements LocationProvider.LocationCallback  {
     private final static String TAG = "MainActivity";
+
+    final Calendar mCalendar = Calendar.getInstance();
     private LocationProvider mLocationProvider;
     private Location mLastLocation;
-
     private String mOfficialSunrise = "", mOfficialSunset = "";
+    private int mYear, mMonth, mDay;
+
+    private TextView mTVDisplayDate;
+    private Button mBtnChangeDate;
+
+    static final int DATE_DIALOG_ID = 999;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +55,9 @@ public class MainActivity extends AppCompatActivity implements LocationProvider.
         setContentView(R.layout.activity_main);
 
         mLocationProvider = new LocationProvider(this, this);
+
+        setCurrentDateOnView();
+        addDateListener();
     }
 
     @Override
@@ -118,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements LocationProvider.
             try {
                 weather = JSONWeatherParser.getWeather(data);
 
-                // Let's retrieve the icon
+                // Retrieve the icon
                 //weather.iconData = ((new WeatherHttpClient()).getImage(weather.currentCondition.getIcon()));
 
             } catch (JSONException e) {
@@ -253,4 +268,52 @@ public class MainActivity extends AppCompatActivity implements LocationProvider.
 
         mLastLocation = location;
     }
+
+    // Display current date
+    public void setCurrentDateOnView() {
+        mTVDisplayDate = (TextView) findViewById(R.id.tvDate);
+        mYear = mCalendar.get(Calendar.YEAR);
+        mMonth = mCalendar.get(Calendar.MONTH);
+        mDay = mCalendar.get(Calendar.DAY_OF_MONTH);
+
+        // Set current date (month is 0 based)
+        mTVDisplayDate.setText((mMonth + 1) + "-" + mDay + "-" + mYear + " ");
+    }
+
+    public void addDateListener() {
+        mBtnChangeDate = (Button) findViewById(R.id.btnChangeDate);
+
+        mBtnChangeDate.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                showDialog(DATE_DIALOG_ID);
+            }
+
+        });
+    }
+
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        switch (id) {
+            case DATE_DIALOG_ID:
+                // Set date picker as current date
+                return new DatePickerDialog(this, datePickerListener, mYear, mMonth, mDay);
+        }
+        return null;
+    }
+
+    private DatePickerDialog.OnDateSetListener datePickerListener
+            = new DatePickerDialog.OnDateSetListener() {
+
+        // when dialog box is closed, below method will be called.
+        public void onDateSet(DatePicker view, int selectedYear, int selectedMonth, int selectedDay) {
+            mYear = selectedYear;
+            mMonth = selectedMonth;
+            mDay = selectedDay;
+
+            // set selected date into textview
+            mTVDisplayDate.setText((mMonth + 1) + "-" + mDay + "-" + mYear + " ");
+        }
+    };
 }

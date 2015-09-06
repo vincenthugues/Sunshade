@@ -6,52 +6,95 @@
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity"
     android:background="#000000">
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/locationSelectionLayout"
-            android:background="#353540">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/locationSelectionLayout"
+        android:background="#353540">
 
-            <RadioGroup
-                android:id="@+id/location_radiogroup"
+        <RadioGroup
+            android:id="@+id/location_radiogroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/current_location_radiobutton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:text="@string/current_location_radiobutton_text"
+                android:checked="true"
+                android:enabled="true"
+                android:onClick="onCurrentLocationRadioButtonClick"
+                android:textColor="#55A0FF" />
 
-                <RadioButton
-                    android:id="@+id/current_location_radiobutton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/current_location_radiobutton_text"
-                    android:checked="true"
-                    android:enabled="true"
-                    android:onClick="onCurrentLocationRadioButtonClick"
-                    android:textColor="#55A0FF" />
+            <RadioButton
+                android:id="@+id/custom_location_radiobutton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/custom_location_radiobutton_text"
+                android:enabled="true"
+                android:checked="false"
+                android:onClick="onCustomLocationRadioButtonClick"
+                android:textColor="#55A0FF" />
 
-                <RadioButton
-                    android:id="@+id/custom_location_radiobutton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/custom_location_radiobutton_text"
-                    android:enabled="true"
-                    android:checked="false"
-                    android:onClick="onCustomLocationRadioButtonClick"
-                    android:textColor="#55A0FF" />
+        </RadioGroup>
 
-            </RadioGroup>
+        <EditText
+                android:id="@+id/custom_location_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/custom_location_default_text"
+                android:inputType="text"
+                android:enabled="false"
+                android:visibility="gone"
+                android:textColor="#55A0FF" />
 
-            <EditText
-                    android:id="@+id/custom_location_edittext"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/custom_location_default_text"
-                    android:inputType="text"
-                    android:enabled="false"
-                    android:visibility="gone"
-                    android:textColor="#55A0FF" />
+    </LinearLayout>
 
-        </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/dateSelectionLayout"
+        android:layout_below="@+id/locationSelectionLayout"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="#353540"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnChangeDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Change Date"
+            android:background="#454550"
+            android:textColor="#55A0FF"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:paddingLeft="14dp"
+            android:paddingRight="14dp" />
+
+        <!--<TextView
+            android:id="@+id/lblDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Current Date (M-D-YYYY): " />-->
+
+        <TextView
+            android:id="@+id/tvDate"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:textColor="#4590DF"
+            android:paddingLeft="14dp"
+            android:paddingRight="14dp" />
+
+        <!--<DatePicker
+            android:id="@+id/dpResult"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />-->
+
+    </LinearLayout>
 
     <Button
         android:layout_width="wrap_content"
@@ -59,23 +102,27 @@
         android:text="@string/get_info_button_text"
         android:id="@+id/getInfoButton"
         android:onClick="onGetInfoButtonClick"
-        android:background="#353540"
-        android:textColor="#55A0FF"
+        android:background="#009698"
+        android:layout_below="@+id/dateSelectionLayout"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        android:layout_below="@+id/locationSelectionLayout" />
+        android:layout_margin="8dp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+        android:textStyle="bold" />
 
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:visibility="invisible"
             android:id="@+id/infoLayout"
             android:background="#353540"
             android:layout_below="@+id/getInfoButton"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true">
+            android:layout_alignParentStart="true"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -91,7 +138,8 @@
                     android:visibility="visible"
                     android:paddingRight="2dp"
                     android:textSize="18dp"
-                    android:textColor="#55A0FF" />
+                    android:textColor="#55A0FF"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -116,7 +164,8 @@
                     android:visibility="visible"
                     android:paddingRight="2dp"
                     android:textSize="18dp"
-                    android:textColor="#55A0FF" />
+                    android:textColor="#55A0FF"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -140,7 +189,8 @@
                     android:id="@+id/localityLabelTextView"
                     android:paddingRight="2dp"
                     android:textSize="18dp"
-                    android:textColor="#55A0FF" />
+                    android:textColor="#55A0FF"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -163,7 +213,8 @@
                     android:id="@+id/sunriseLabelTextView"
                     android:paddingRight="2dp"
                     android:textSize="18dp"
-                    android:textColor="#55A0FF" />
+                    android:textColor="#55A0FF"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -186,7 +237,8 @@
                     android:id="@+id/sunsetLabelTextView"
                     android:paddingRight="2dp"
                     android:textSize="18dp"
-                    android:textColor="#55A0FF" />
+                    android:textColor="#55A0FF"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -209,7 +261,8 @@
                     android:id="@+id/weatherLabelTextView"
                     android:paddingRight="2dp"
                     android:textSize="18dp"
-                    android:textColor="#55A0FF" />
+                    android:textColor="#55A0FF"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"

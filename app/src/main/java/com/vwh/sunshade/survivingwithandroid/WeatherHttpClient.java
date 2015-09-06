@@ -24,7 +24,7 @@ public class WeatherHttpClient {
             //con = (HttpURLConnection) (new URL(BASE_URL + location)).openConnection();
             //String urlStr = LAT_LON_URL + "lat=" + (int)location.getLatitude() + "&lon=" + (int)location.getLongitude() + "&cnt=1";
             String urlStr = LAT_LON_URL + "lat=" + (int)location.getLatitude() + "&lon=" + (int)location.getLongitude();
-            Log.v(null, "urlStr: " + urlStr);
+            //Log.v(null, "urlStr: " + urlStr);
             con = (HttpURLConnection) (new URL(urlStr)).openConnection();
             con.setRequestMethod("GET");
             con.setDoInput(true);
@@ -41,7 +41,7 @@ public class WeatherHttpClient {
 
             is.close();
             con.disconnect();
-            Log.v(null, "Buffer: " + buffer.toString());
+            //Log.v(null, "Buffer: " + buffer.toString());
             return buffer.toString();
         }
         catch(Throwable t) {
