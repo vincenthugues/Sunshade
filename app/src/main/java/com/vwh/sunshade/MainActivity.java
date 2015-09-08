@@ -172,27 +172,29 @@ public class MainActivity extends AppCompatActivity implements LocationProvider.
     protected void updateSunriseSunset() {
         // Get data
         //SimpleDateFormat sdf = new SimpleDateFormat("MMM-dd-yyyy");
-        Date date = new Date(); // Current date
+        //Date date = new Date(); // Current date
 
         // Process data
         SunriseSunsetCalculator calculator = new SunriseSunsetCalculator(
                 new com.vwh.sunshade.luckycatlabs.Location(mLastLocation.getLatitude(), mLastLocation.getLongitude()),
                 TimeZone.getDefault());
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
+        //Calendar calendar = Calendar.getInstance();
+        //calendar.setTime(date);
 
-        mOfficialSunrise = calculator.getOfficialSunriseForDate(calendar);
-        mOfficialSunset = calculator.getOfficialSunsetForDate(calendar);
+        //Log.v(TAG, mCalendar.toString());
 
-        /*astronomicalSunrise = calculator.getAstronomicalSunriseForDate(calendar);
-        astronomicalSunset = calculator.getAstronomicalSunsetForDate(calendar);
+        mOfficialSunrise = calculator.getOfficialSunriseForDate(mCalendar);
+        mOfficialSunset = calculator.getOfficialSunsetForDate(mCalendar);
 
-        civilSunrise = calculator.getCivilSunriseForDate(calendar);
-        civilSunset = calculator.getCivilSunsetForDate(calendar);
+        /*astronomicalSunrise = calculator.getAstronomicalSunriseForDate(mCalendar);
+        astronomicalSunset = calculator.getAstronomicalSunsetForDate(mCalendar);
 
-        nauticalSunrise = calculator.getNauticalSunriseForDate(calendar);
-        nauticalSunset = calculator.getNauticalSunsetForDate(calendar);*/
+        civilSunrise = calculator.getCivilSunriseForDate(mCalendar);
+        civilSunset = calculator.getCivilSunsetForDate(mCalendar);
+
+        nauticalSunrise = calculator.getNauticalSunriseForDate(mCalendar);
+        nauticalSunset = calculator.getNauticalSunsetForDate(mCalendar);*/
     }
 
     protected void getCurrentLocationInfo() {
